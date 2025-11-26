@@ -41,14 +41,16 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+             'role' => $request->role,
             'status' => 'pending', // статус подтверждения в роутинге не пускаем если pending кроме админа
+            'account_is_active' => false,
         ]);
-
+        $user->assignRole($request->role); // 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        // return redirect(RouteServiceProvider::HOME);
+        return redirect('/');
     }
 }

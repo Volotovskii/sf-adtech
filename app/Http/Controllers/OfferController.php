@@ -9,9 +9,7 @@ class OfferController extends Controller
 {
     public function index()
     {
-        // $offers = auth()->user()->offers()->with(['subscriptions' => function ($query) {
-        //     $query->where('is_active', true)->with('webmaster');
-        // }])->get();
+
 
      $offers = auth()->user()->offers()->with(['subscriptions' => function ($query) {
         $query->where('subscriptions.is_active', true) // <-- Указываем имя таблицы

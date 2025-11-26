@@ -6,13 +6,14 @@ use App\Http\Controllers\AdvertiserController;
 use App\Http\Controllers\WebmasterController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\OfferController;
-use Spatie\Permission\Traits\HasRoles;
+
+
 
 // Главная страница
-Route::get('/', function () {
+// Route::get('/', function () {
 
-    return view('welcome');
-});
+//     return view('welcome');
+// });
 
 
 
@@ -22,15 +23,29 @@ require __DIR__ . '/auth.php';
 // Только авторизованные пользователи
 // Если статус ожидание редирект на информацию об этом TODO
 Route::middleware(['auth', 'check.user.status'])->group(function () {
+
+    Route::get('/', function () {
+        $user = auth()->user(); 
+
+        if ($user->hasRole('admin')) {
+ 
+        }
+        if ($user->hasRole('webmaster')) {
+             return redirect()->route('webmaster.dashboard');
+        } elseif ($user->hasRole('advertiser')) {
+             return redirect()->route('advertiser.dashboard');
+        }
+
+        abort(403);
+    })->name('home');
+
     // advertiser
     Route::prefix('advertiser')->middleware(['role:advertiser'])->group(function () {
         Route::get('/', [AdvertiserController::class, 'dashboard'])->name('advertiser.dashboard');
         Route::resource('offers', OfferController::class)->names('advertiser.offers');
         Route::get('/stats', [AdvertiserController::class, 'stats'])->name('advertiser.stats');
-         //Route::put('/offers/{offer}/status', [OfferController::class, 'updateStatus'])->name('offer.updateStatus');
-         Route::put('/offers/{offer}/status', [OfferController::class, 'updateStatus'])->name('offers.updateStatus');
-        //Route::put('/offers/{offer}/status', [OfferController::class, 'updateStatus'])->name('advertiser.offers.updateStatus');
-Route::put('/advertiser/offers/{offer}/status', [OfferController::class, 'updateStatus'])->name('offers.updateStatus');
+        Route::put('/offers/{offer}/status', [OfferController::class, 'updateStatus'])->name('offers.updateStatus');
+
     });
 
     // webmaster
@@ -39,12 +54,10 @@ Route::put('/advertiser/offers/{offer}/status', [OfferController::class, 'update
         Route::get('/offers', [WebmasterController::class, 'offers'])->name('webmaster.offers');
         Route::post('/subscribe/{offer}', [WebmasterController::class, 'subscribe'])->name('webmaster.subscribe');
         Route::delete('/unsubscribe/{offer}', [WebmasterController::class, 'unsubscribe'])->name('webmaster.unsubscribe');
-        Route::post('/unsubscribe/{offer}', [WebmasterController::class, 'unsubscribe'])->name('webmaster.unsubscribe');
         Route::put('/webmaster/update-markup/{offer}', [WebmasterController::class, 'updateMarkup'])->name('webmaster.update-markup');
         Route::get('/links', [WebmasterController::class, 'links'])->name('webmaster.links');
         Route::get('/stats', [WebmasterController::class, 'stats'])->name('webmaster.stats');
     });
-
 });
 
 // admin (без check.user.status, чтобы админ мог управлять)
@@ -62,12 +75,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/approve-user/{id}', [AdminController::class, 'approveUser'])->name('admin.approve-user');
         Route::post('/reject-user/{id}', [AdminController::class, 'rejectUser'])->name('admin.reject-user');
         Route::post('/admin/toggle-user/{id}', [AdminController::class, 'toggleUser'])->name('admin.toggle-user');
-         // регистрация пользователей
+        // регистрация пользователей
         Route::get('/create-user', [AdminController::class, 'showCreateUserForm'])->name('admin.create-user.form');
         Route::post('/create-user', [AdminController::class, 'createUser'])->name('admin.create-user');
     });
 });
 
 // redirector (публичный маршрут, без аутентификации)
-Route::get('/go/{token}', [RedirectController::class, 'redirect'])->name('redirect.link');
-
+// Route::get('/go/{token}', [RedirectController::class, 'redirect'])->name('redirect.link');

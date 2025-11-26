@@ -6,7 +6,7 @@ use App\Models\Click;
 use App\Models\Offer;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
-use App\Models\Statistic; // ✅
+use App\Models\Statistic; 
 
 
 class WebmasterController extends Controller

@@ -27,5 +27,6 @@ class Kernel extends ConsoleKernel
 
     protected $commands = [
         Commands\SeedRoles::class,
+        Commands\MigrateUserRoles::class,
     ];
 }

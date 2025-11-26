@@ -46,9 +46,12 @@ class AdminController extends Controller
 
         $user->save();
 
+        $user->assignRole($request->role);
+
         // Возвращаемся на страницу со списком пользователей с сообщением
         return redirect()->route('admin.users')->with('success', 'Пользователь успешно создан.');
     }
+
 
     public function dashboard()
     {

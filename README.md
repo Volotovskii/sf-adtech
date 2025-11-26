@@ -43,7 +43,7 @@
  - Blade Шаблонизатор
  - Bootstrap 5 Frontend-фреймворк
  - Chart.js Графики
-  -  Vite Сборка CSS/JS
+  -  Vite Сборка CSS/JS (vite.config.js - подключаем js)
  - Laravel Breeze Аутентификация
  - Laravel Permission Роли и права
 
@@ -58,6 +58,7 @@
 6) database/seeders/ — начальные данные.
 7) routes/ — маршруты.
 8) public/ — ассеты.
+
 
 #### Модели:
 1) User — пользователь (роли: admin, advertiser, webmaster).
@@ -124,3 +125,14 @@ DB_PASSWORD=ваш_пароль
 - php artisan serve
 8) Откройте в браузере
 - http://127.0.0.1:8000
+
+## Бэкап базы данных
+
+Для восстановления базы данных:
+
+1. Загрузите `sf-adtech-backup.zip`. или sf_adtech.sql
+2. Извлеките SQL-дамп.
+3. Импортируйте в MySQL:
+
+```bash
+mysql -u [user] -p [database] < dump.sql

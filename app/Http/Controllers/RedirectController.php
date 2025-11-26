@@ -17,7 +17,7 @@ class RedirectController extends Controller
 
 
         if (!$webmasterId) {
-            // ✅ Логируем отказ: webmaster_id не передан
+            // Логируем отказ: webmaster_id не передан
             \App\Models\RedirectFailure::create([
                 'webmaster_id' => null,
                 'offer_id' => $offerId,
