@@ -131,6 +131,9 @@ class OfferController extends Controller
 
         $offer->update(['status' => $request->status]);
 
+        
+
+
         return response()->json(['message' => 'Status updated successfully']);
     }
 

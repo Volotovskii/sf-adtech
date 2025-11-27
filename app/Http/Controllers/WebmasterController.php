@@ -6,7 +6,7 @@ use App\Models\Click;
 use App\Models\Offer;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
-use App\Models\Statistic; 
+use App\Models\Statistic;
 
 
 class WebmasterController extends Controller
@@ -216,7 +216,7 @@ class WebmasterController extends Controller
             'is_active' => true,
         ]);
 
-        
+
 
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -342,7 +342,7 @@ class WebmasterController extends Controller
 
         $query = Subscription::where('webmaster_id', auth()->id())
             ->with(['offer' => function ($query) {
-                $query->withTrashed(); 
+                $query->withTrashed();
             }]);
 
 
@@ -393,18 +393,18 @@ class WebmasterController extends Controller
                             ->orderBy('period')
                             ->get();
                         break;
-                         case 'month':
+                    case 'month':
                         $clicks = Click::where('webmaster_id', auth()->id())
                             ->where('offer_id', $offerId)
                             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as period, COUNT(*) as count') // Извлекаем Год-Месяц
-                            ->groupBy('period') 
-                            ->orderBy('period') 
+                            ->groupBy('period')
+                            ->orderBy('period')
                             ->get();
 
                         $earnings = Statistic::where('webmaster_id', auth()->id())
                             ->where('offer_id', $offerId)
                             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as period, SUM(revenue) as total_earnings') // Извлекаем Год-Месяц, суммируем
-                            ->groupBy('period') 
+                            ->groupBy('period')
                             ->orderBy('period')
                             ->get();
                         break;
@@ -412,14 +412,14 @@ class WebmasterController extends Controller
                         $clicks = Click::where('webmaster_id', auth()->id())
                             ->where('offer_id', $offerId)
                             ->selectRaw('DATE_FORMAT(created_at, "%Y") as period, COUNT(*) as count') // Извлекаем Год
-                            ->groupBy('period') 
-                            ->orderBy('period') 
+                            ->groupBy('period')
+                            ->orderBy('period')
                             ->get();
 
                         $earnings = Statistic::where('webmaster_id', auth()->id())
                             ->where('offer_id', $offerId)
                             ->selectRaw('DATE_FORMAT(created_at, "%Y") as period, SUM(revenue) as total_earnings') // Извлекаем Год, суммируем
-                            ->groupBy('period') 
+                            ->groupBy('period')
                             ->orderBy('period')
                             ->get();
                         break;
@@ -485,19 +485,19 @@ class WebmasterController extends Controller
                                 ->orderBy('period')
                                 ->get();
                             break;
-                            case 'month':
+                        case 'month':
                             $clicks = Click::where('webmaster_id', auth()->id())
                                 ->where('offer_id', $subscription->offer_id)
                                 ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as period, COUNT(*) as count') // Извлекаем Год-Месяц
-                                ->groupBy('period') 
-                                ->orderBy('period') 
+                                ->groupBy('period')
+                                ->orderBy('period')
                                 ->get();
 
                             $earnings = Statistic::where('webmaster_id', auth()->id())
                                 ->where('offer_id', $subscription->offer_id)
                                 ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as period, SUM(revenue) as total_earnings') // Извлекаем Год-Месяц, суммируем
-                                ->groupBy('period') 
-                                ->orderBy('period') 
+                                ->groupBy('period')
+                                ->orderBy('period')
                                 ->get();
                             break;
 
@@ -505,7 +505,7 @@ class WebmasterController extends Controller
                             $clicks = Click::where('webmaster_id', auth()->id())
                                 ->where('offer_id', $subscription->offer_id)
                                 ->selectRaw('DATE_FORMAT(created_at, "%Y") as period, COUNT(*) as count') // Извлекаем Год
-                                ->groupBy('period') 
+                                ->groupBy('period')
                                 ->orderBy('period')
                                 ->get();
 
@@ -513,7 +513,7 @@ class WebmasterController extends Controller
                                 ->where('offer_id', $subscription->offer_id)
                                 ->selectRaw('DATE_FORMAT(created_at, "%Y") as period, SUM(revenue) as total_earnings') // Извлекаем Год, суммируем
                                 ->groupBy('period')
-                                ->orderBy('period') 
+                                ->orderBy('period')
                                 ->get();
                             break;
                         case 'day':
@@ -585,10 +585,23 @@ class WebmasterController extends Controller
             ->where('offer_id', $offerId)
             ->first();
 
+
+
+
         if (!$subscription) {
             // return redirect()->back()->with('error', 'Subscription not found.');
             //верну json для скриптов
-            return response()->json(['success' => false, 'message' => 'Подписка не найдена.'], 404);
+
+            if ($request->ajax() || $request->wantsJson()) {
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Подписка не найдена.',
+                    'markup' => $request->markup
+                ], 404);
+            }
+            return redirect()->back()->with('error', 'Подписка не найдена.');
+            //return response()->json(['success' => false, 'message' => 'Подписка не найдена.'], 404);
         }
 
         $request->validate([
@@ -599,7 +612,20 @@ class WebmasterController extends Controller
             'markup' => $request->markup,
         ]);
 
-        //return redirect()->back()->with('success', 'Успешно обновлено!');
-        return response()->json(['success' => true, 'message' => 'Успешно обновлено!', 'markup' => $request->markup]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Успешно обновлено!',
+                'markup' => $request->markup
+            ]);
+        }
+
+
+        //return redirect()->back()->with('success', $successMessage);
+
+        return redirect()->back()->with('success', 'Успешно обновлено!');
+        //return response()->json(['success' => true, 'message' => 'Успешно обновлено!', 'markup' => $request->markup]);
     }
 }

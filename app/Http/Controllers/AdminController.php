@@ -103,7 +103,7 @@ class AdminController extends Controller
     //     $user->update(['is_active' => !$user->is_active]);
     //     return redirect()->back()->with('success', 'User status updated.');
     // }
-    public function toggleUser($id)
+    public function toggleUser(Request $request, $id)
     {
         $user = User::find($id);
 
@@ -118,15 +118,19 @@ class AdminController extends Controller
         // Переключаем статус
         $user->update(['account_is_active' => !$currentActiveStatus]);
 
-
-       
         // Возвращаем JSON-успех с новым статусом
-        return response()->json([
-            'success' => true,
-            'message' => 'Статус обновлён.',
-            'account_is_active' => !$currentActiveStatus, // новый статус
-            'user_id' => $user->id
-        ]);
+        if ($request->ajax() || $request->wantsJson()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Статус обновлён.',
+                'account_is_active' => !$currentActiveStatus, // новый статус
+                'user_id' => $user->id
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Статус обновлён!');
+
     }
 
     public function systemStats()
