@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <form method="POST" action="/webmaster/update-markup/${offerId}" class="d-inline update-markup-form" data-offer-id="${offerId}">
                                 <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
                                 <input type="hidden" name="_method" value="PUT">
-                                <input type="number" name="markup" value="${markup}" step="0.01" min="0" class="form-control-sm d-inline-block w-auto">
+                                <input type="number" name="markup" value="${markup}" step="0.01" min="0" class="markup-input">
                                 <button type="submit" class="btn btn-warning btn-sm">Изменить</button>
                             </form>
                         `;
@@ -100,7 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({ _method: 'DELETE' })
             })
@@ -127,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             actionsDiv.innerHTML = `
                     <form method="POST" action="/webmaster/subscribe/${offerId}" class="d-inline subscribe-form" data-offer-id="${offerId}">
         <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
-        <input type="number" name="markup" placeholder="Наценка" step="0.01" min="0" required class="form-control-sm d-inline-block w-auto">
+        <input type="number" name="markup" placeholder="Наценка" step="0.01" min="0" required class="markup-input">
         <button type="submit" class="btn btn-primary btn-sm">Подписаться</button>
     </form>
 `;
@@ -180,7 +181,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({ markup: newMarkup, _method: 'PUT' })
             })
@@ -278,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <form method="POST" action="/webmaster/update-markup/${offerId}" class="d-inline update-markup-form" data-offer-id="${offerId}">
                                 <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
                                 <input type="hidden" name="_method" value="PUT">
-                                <input type="number" name="markup" value="${numMarkup}" step="0.01" min="0" class="form-control-sm d-inline-block w-auto">
+                                <input type="number" name="markup" value="${numMarkup}" step="0.01" min="0" class="markup-input">
                                 <button type="submit" class="btn btn-warning btn-sm">Изменить</button>
                             </form>
                         `;
@@ -322,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             actionsDiv.innerHTML = `
                             <form method="POST" action="/webmaster/subscribe/${offerId}" class="d-inline subscribe-form" data-offer-id="${offerId}">
                                 <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
-                                <input type="number" name="markup" placeholder="Наценка" step="0.01" min="0" required class="form-control-sm d-inline-block w-auto">
+                                <input type="number" name="markup" placeholder="Наценка" step="0.01" min="0" required class="markup-input">
                                 <button type="submit" class="btn btn-primary btn-sm">Подписаться</button>
                             </form>
                         `;
