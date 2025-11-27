@@ -216,7 +216,7 @@ class WebmasterController extends Controller
             'is_active' => true,
         ]);
 
-        $successMessage = 'Подписка успешно оформлена!';
+        
 
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -342,18 +342,18 @@ class WebmasterController extends Controller
 
         $query = Subscription::where('webmaster_id', auth()->id())
             ->with(['offer' => function ($query) {
-                $query->withTrashed(); // ✅ Включаем удалённые офферы
+                $query->withTrashed(); 
             }]);
 
 
         // Фильтр по статусу
         if ($status === 'active') {
-            $query->where('is_active', true); // ✅ Фильтруем запрос
+            $query->where('is_active', true);
         } elseif ($status === 'inactive') {
-            $query->where('is_active', false); // ✅
+            $query->where('is_active', false);
         }
 
-        $allSubscriptions = $query->get(); // получаем результат
+        $allSubscriptions = $query->get();
 
         $allClicks = [];
         $allEarnings = [];

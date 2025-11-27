@@ -27,7 +27,7 @@
                 <div class="offer-actions">
                     <form method="POST" action="{{ route('webmaster.subscribe', $offer->id) }}" class="d-inline subscribe-form">
                         @csrf
-                        <input type="number" name="markup" placeholder="Наценка" step="0.01" min="0" required class="form-control-sm d-inline-block w-auto" draggable="false">
+                        <input type="number" name="markup" placeholder="Наценка" step="0.01" min="0" required class="markup-input" draggable="false">
                         <button type="submit" class="btn btn-primary btn-sm">Подписаться</button>
                     </form>
                 </div>
@@ -62,7 +62,7 @@
                     <form method="POST" action="{{ route('webmaster.update-markup', $relatedOffer->id) }}" class="d-inline update-markup-form" data-offer-id="{{ $relatedOffer->id }}">
                         @csrf
                         @method('PUT')
-                        <input type="number" name="markup" value="{{ $subscription->markup }}" step="0.01" min="0" draggable="false">
+                        <input type="number" name="markup" value="{{ $subscription->markup }}" step="0.01" min="0" draggable="false" class="markup-input">
                         <button type="submit" class="btn btn-warning btn-sm">Изменить</button>
                     </form>
                 </div>
